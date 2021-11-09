@@ -7,7 +7,7 @@ using UnityEngine;
 public class Cube : MonoBehaviour
 {
     [SerializeField] private TMP_Text _text;
-    private bool scaleActive;
+    private int tranformObject = 0;
     private Vector2 startPos;
     private Vector2 direction;
     
@@ -25,25 +25,39 @@ public class Cube : MonoBehaviour
             if (touch.phase == TouchPhase.Moved)
             {
                 var distance = Vector2.Distance(touch.position, startPos);
-                if (scaleActive)
-                    transform.localScale = new Vector3(distance, distance, distance) * 0.001f;
-                else
-                    transform.Rotate(distance * 0.1f, 0.0f, 0.0f, Space.Self);
+
+                switch (tranformObject)
+                {
+                    case 0 :
+                        transform.localScale = new Vector3(distance, distance, distance) * 0.001f;
+                        break;
+                    case 1:
+                        transform.Rotate(distance * 0.1f, 0.0f, 0.0f, Space.Self);
+                        break;
+                    case 2:
+                        transform.localPosition = new Vector3(distance * 0.001f, 0 , 0);
+                        break;
+                }
                 _text.SetText(distance.ToString());
             }
         }
         
-        transform.localRotation = Quaternion.Euler(0.001f, 0, 0);
+        //transform.localRotation = Quaternion.Euler(0.001f, 0, 0);
     }
 
     public void ScaleOnClick()
     {
-        scaleActive = true;
+        tranformObject = 0;
     }
 
     public void RotationOnCLick()
     {
-        scaleActive = false;
+        tranformObject = 1;
+    }
+
+    public void PositionOnClick()
+    {
+        tranformObject = 2;
     }
 
     // private void OnMouseDown()
