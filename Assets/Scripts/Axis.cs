@@ -11,6 +11,11 @@ public class Axis : MonoBehaviour
     private Vector2 startPos;
     private Vector2 endPos;
     private GameObject axis;
+
+    public void SetObjectTarget(GameObject newObjectTarget)
+    {
+        _ObjectTarget = newObjectTarget.transform;
+    }
     
     // float movedownY = 0.0f;
     // float sensitivityY = 1;
@@ -44,23 +49,25 @@ public class Axis : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            endPos = Input.mousePosition;
-            distance = endPos.x - startPos.x;
-            //distance = Vector2.Distance(endPos, startPos);
-
-            switch (_gameManager.tranformMode)
+            if (_ObjectTarget.name == _gameManager.currentObject)
             {
-                case "position":
-                    PositionAxis();
-                    break;
-                case "rotation":
-                    RotationAxis();
-                    break;
-                case "scale":
-                    ScaleAxis();
-                    break;
+                endPos = Input.mousePosition;
+                distance = endPos.x - startPos.x;
+                //distance = Vector2.Distance(endPos, startPos);
+
+                switch (_gameManager.tranformMode)
+                {
+                    case "position":
+                        PositionAxis();
+                        break;
+                    case "rotation":
+                        RotationAxis();
+                        break;
+                    case "scale":
+                        ScaleAxis();
+                        break;
+                }   
             }
-            
         }
 
         // if (Input.GetMouseButtonUp(0))
