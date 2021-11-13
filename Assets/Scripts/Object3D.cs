@@ -15,6 +15,6 @@ public class Object3D : MonoBehaviour
 
     public void NewObjectOnClick()
     {
-        _gameManager.NewObjectCreated(ObjectPrefab);
+        _gameManager.Create(ObjectPrefab);
     }
 }

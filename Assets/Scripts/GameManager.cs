@@ -14,21 +14,24 @@ public class GameManager : MonoBehaviour
         tranformMode = mode;
     }
 
-    public void NewObjectCreated(GameObject objectPrefab)
+    public void Create(GameObject objectPrefab)
     {
-        var objectCreated = Instantiate(objectPrefab, Vector3.zero, Quaternion.identity);
+        var objectCreated = Instantiate(objectPrefab);
         objectCreated.name = objectPrefab.name + order;
         order++;
         var axisCreated = Instantiate(axisPrefab);
         
-        axisCreated.transform.parent = objectCreated.transform.GetChild(0);
+        axisCreated.transform.parent = objectCreated.transform;
         axisCreated.transform.localPosition = Vector3.zero;
         
         objectCreated.GetComponentInChildren<ObjectCreated>().SetAxisXYZ(axisCreated);
         foreach (Transform trans in axisCreated.transform)
         {
-            trans.GetComponent<Axis>().SetObjectTarget(objectCreated.transform.GetChild(0).gameObject);
+            var objectChild = objectCreated.transform.GetChild(0).gameObject;
+            trans.GetComponent<Axis>().SetObjectTarget(objectChild);
         }
+
+        objectCreated.transform.eulerAngles = new Vector3(0, 180f, 0);
     }
 
     public void RemoveObjectOnClick()

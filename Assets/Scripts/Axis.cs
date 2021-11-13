@@ -143,6 +143,7 @@ public class Axis : MonoBehaviour
                 _ObjectTarget.Translate(0, 0, distance * 0.000005f);
                 break;
         }
+        SetTranformAxis();
     }
     
     private void ScaleAxis()
@@ -159,20 +160,26 @@ public class Axis : MonoBehaviour
                 _ObjectTarget.localScale += new Vector3(0, 0, distance * 0.0000005f);
                 break;
         }
-        //ResetScaleAxis();
+        SetTranformAxis();
     }
 
-    public void ResetScaleAxis()
+    private void SetTranformAxis()
     {
         if (transform.gameObject.name == "AxisX")
         {
-            transform.localScale = new Vector3(_ObjectTarget.localScale.x * 0.5f,_ObjectTarget.localScale.y * 0.1f, _ObjectTarget.localScale.z * 0.1f);                    
+            transform.parent.eulerAngles = _ObjectTarget.eulerAngles;
+            transform.parent.position = _ObjectTarget.position;
+            transform.localPosition = new Vector3(_ObjectTarget.localScale.x * -10.5f, 0f, 0f);
         } else if (transform.gameObject.name == "AxisY")
         {
-            transform.localScale = new Vector3(_ObjectTarget.localScale.x * 0.1f,_ObjectTarget.localScale.y * 0.5f,_ObjectTarget.localScale.z * 0.1f);   
+            transform.parent.eulerAngles = _ObjectTarget.eulerAngles;
+            transform.parent.position = _ObjectTarget.position;
+            transform.localPosition = new Vector3(0, _ObjectTarget.localScale.y * 10.5f, 0f);
         } else if (transform.gameObject.name == "AxisZ")
         {
-            transform.localScale = new Vector3(_ObjectTarget.localScale.x * 0.1f,_ObjectTarget.localScale.y * 0.1f,_ObjectTarget.localScale.z * 0.5f);
+            transform.parent.eulerAngles = _ObjectTarget.eulerAngles;
+            transform.parent.position = _ObjectTarget.position;
+            transform.localPosition = new Vector3(0, 0f, _ObjectTarget.localScale.z * 10.5f);
         }
     }
     
@@ -190,5 +197,6 @@ public class Axis : MonoBehaviour
                 _ObjectTarget.Rotate(0, 0, distance * 0.00005f);
                 break;
         }
+        SetTranformAxis();
     }
 }
