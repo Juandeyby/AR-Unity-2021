@@ -21,14 +21,13 @@ public class GameManager : MonoBehaviour
         order++;
         var axisCreated = Instantiate(axisPrefab);
         
-        axisCreated.transform.parent = objectCreated.transform;
+        axisCreated.transform.parent = objectCreated.transform.GetChild(0);
         axisCreated.transform.localPosition = Vector3.zero;
-        axisCreated.transform.localRotation = Quaternion.identity;
         
-        objectCreated.GetComponent<ObjectCreated>().SetAxisXYZ(axisCreated);
+        objectCreated.GetComponentInChildren<ObjectCreated>().SetAxisXYZ(axisCreated);
         foreach (Transform trans in axisCreated.transform)
         {
-            trans.GetComponent<Axis>().SetObjectTarget(objectCreated);
+            trans.GetComponent<Axis>().SetObjectTarget(objectCreated.transform.GetChild(0).gameObject);
         }
     }
 

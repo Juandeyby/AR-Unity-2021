@@ -23,6 +23,8 @@ public class ObjectCreated : MonoBehaviour
     {
         _gameManager = FindObjectOfType<GameManager>();
     }
+
+#if UNITY_EDITOR
     private void OnMouseDown()
     {
         _gameManager.currentObject = gameObject.name;
@@ -33,4 +35,26 @@ public class ObjectCreated : MonoBehaviour
         }
         _axisXYZ.SetActive(true);
     }
+#endif
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+    private void Update()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+        
+            if (touch.phase == TouchPhase.Began)
+            {
+                _gameManager.currentObject = gameObject.name;
+                var listObjectsCreated = FindObjectsOfType<ObjectCreated>();
+                foreach (var ObjectCreated in listObjectsCreated)
+                {
+                    ObjectCreated.GetAxisXYZ().SetActive(false);
+                }
+                _axisXYZ.SetActive(true);
+            }
+        }
+    }
+#endif
 }

@@ -34,7 +34,7 @@ public class Axis : MonoBehaviour
         // movedownY = 0.0f;
         //
         
-        
+#if UNITY_EDITOR        
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -69,6 +69,44 @@ public class Axis : MonoBehaviour
                 }   
             }
         }
+#endif
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        if (Input.touchCount > 0)
+        {
+            Ray raycast = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            if (Physics.Raycast(raycast, out var hit))
+            {
+                startPos = Input.GetTouch(0).position;
+                axis = hit.transform.gameObject;
+            }
+
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Moved)
+            {
+                if (_ObjectTarget.name == _gameManager.currentObject)
+                {
+                    endPos = touch.position;
+                    distance = endPos.x - startPos.x;
+                    //distance = Vector2.Distance(endPos, startPos);
+
+                    switch (_gameManager.tranformMode)
+                    {
+                        case "position":
+                            PositionAxis();
+                            break;
+                        case "rotation":
+                            RotationAxis();
+                            break;
+                        case "scale":
+                            ScaleAxis();
+                            break;
+                    }   
+                }
+            }
+        }
+#endif
+        
 
         // if (Input.GetMouseButtonUp(0))
         // {
@@ -96,13 +134,13 @@ public class Axis : MonoBehaviour
         switch (axis.name)
         {
             case "AxisX":
-                _ObjectTarget.Translate(distance * 0.00005f, 0, 0);
+                _ObjectTarget.Translate(distance * 0.000005f, 0, 0);
                 break;
             case "AxisY":
-                _ObjectTarget.Translate(0, distance * 0.00005f, 0);
+                _ObjectTarget.Translate(0, distance * 0.000005f, 0);
                 break;
             case "AxisZ":
-                _ObjectTarget.Translate(0, 0, distance * 0.00005f);
+                _ObjectTarget.Translate(0, 0, distance * 0.000005f);
                 break;
         }
     }
@@ -112,29 +150,29 @@ public class Axis : MonoBehaviour
         switch (axis.name)
         {
             case "AxisX":
-                _ObjectTarget.localScale += new Vector3(distance * 0.00005f, 0, 0);
+                _ObjectTarget.localScale += new Vector3(distance * 0.0000005f, 0, 0);
                 break;
             case "AxisY":
-                _ObjectTarget.localScale += new Vector3(0, distance * 0.00005f, 0);
+                _ObjectTarget.localScale += new Vector3(0, distance * 0.0000005f, 0);
                 break;
             case "AxisZ":
-                _ObjectTarget.localScale += new Vector3(0, 0, distance * 0.00005f);
+                _ObjectTarget.localScale += new Vector3(0, 0, distance * 0.0000005f);
                 break;
         }
-        ResetScaleAxis();
+        //ResetScaleAxis();
     }
 
     public void ResetScaleAxis()
     {
         if (transform.gameObject.name == "AxisX")
         {
-            transform.localScale = new Vector3(1 / _ObjectTarget.localScale.x * 0.5f,1 / _ObjectTarget.localScale.y * 0.1f,1 / _ObjectTarget.localScale.z * 0.1f);                    
+            transform.localScale = new Vector3(_ObjectTarget.localScale.x * 0.5f,_ObjectTarget.localScale.y * 0.1f, _ObjectTarget.localScale.z * 0.1f);                    
         } else if (transform.gameObject.name == "AxisY")
         {
-            transform.localScale = new Vector3(1 / _ObjectTarget.localScale.x * 0.1f,1 / _ObjectTarget.localScale.y * 0.5f,1 / _ObjectTarget.localScale.z * 0.1f);   
+            transform.localScale = new Vector3(_ObjectTarget.localScale.x * 0.1f,_ObjectTarget.localScale.y * 0.5f,_ObjectTarget.localScale.z * 0.1f);   
         } else if (transform.gameObject.name == "AxisZ")
         {
-            transform.localScale = new Vector3(1 / _ObjectTarget.localScale.x * 0.1f,1 / _ObjectTarget.localScale.y * 0.1f,1 / _ObjectTarget.localScale.z * 0.5f);
+            transform.localScale = new Vector3(_ObjectTarget.localScale.x * 0.1f,_ObjectTarget.localScale.y * 0.1f,_ObjectTarget.localScale.z * 0.5f);
         }
     }
     
