@@ -23,6 +23,7 @@ public class Axis : MonoBehaviour
     private void Start()
     {
         _gameManager = FindObjectOfType<GameManager>();
+        _ObjectTarget = transform.parent.parent;
     }
 
     private void Update()
@@ -151,13 +152,13 @@ public class Axis : MonoBehaviour
         switch (axis.name)
         {
             case "AxisX":
-                _ObjectTarget.localScale += new Vector3(distance * 0.0000005f, 0, 0);
+                _ObjectTarget.localScale += new Vector3(distance * 0.000005f, 0, 0);
                 break;
             case "AxisY":
-                _ObjectTarget.localScale += new Vector3(0, distance * 0.0000005f, 0);
+                _ObjectTarget.localScale += new Vector3(0, distance * 0.000005f, 0);
                 break;
             case "AxisZ":
-                _ObjectTarget.localScale += new Vector3(0, 0, distance * 0.0000005f);
+                _ObjectTarget.localScale += new Vector3(0, 0, distance * 0.000005f);
                 break;
         }
         SetTranformAxis();
@@ -167,19 +168,31 @@ public class Axis : MonoBehaviour
     {
         if (transform.gameObject.name == "AxisX")
         {
-            transform.parent.eulerAngles = _ObjectTarget.eulerAngles;
-            transform.parent.position = _ObjectTarget.position;
-            transform.localPosition = new Vector3(_ObjectTarget.localScale.x * -10.5f, 0f, 0f);
+            //transform.parent.eulerAngles = _ObjectTarget.eulerAngles;
+            //transform.parent.position = _ObjectTarget.position;
+            //transform.localPosition = new Vector3(0.5f, 0.1f, 0.1f);
+            transform.localScale = new Vector3(
+                1 / _ObjectTarget.localScale.x,
+                1 / _ObjectTarget.localScale.y,
+                1 / _ObjectTarget.localScale.z);
         } else if (transform.gameObject.name == "AxisY")
         {
-            transform.parent.eulerAngles = _ObjectTarget.eulerAngles;
-            transform.parent.position = _ObjectTarget.position;
-            transform.localPosition = new Vector3(0, _ObjectTarget.localScale.y * 10.5f, 0f);
+            //transform.parent.eulerAngles = _ObjectTarget.eulerAngles;
+            //transform.parent.position = _ObjectTarget.position;
+            //transform.localScale = new Vector3(0.1f, 0.5f, 0.1f);
+            transform.localScale = new Vector3(
+                1 / _ObjectTarget.localScale.x,
+                1 / _ObjectTarget.localScale.y,
+                1 / _ObjectTarget.localScale.z);
         } else if (transform.gameObject.name == "AxisZ")
         {
-            transform.parent.eulerAngles = _ObjectTarget.eulerAngles;
-            transform.parent.position = _ObjectTarget.position;
-            transform.localPosition = new Vector3(0, 0f, _ObjectTarget.localScale.z * 10.5f);
+            //transform.parent.eulerAngles = _ObjectTarget.eulerAngles;
+            //transform.parent.position = _ObjectTarget.position;
+            //transform.localScale = new Vector3(0.1f, 0.1f, 0.5f);
+            transform.localScale = new Vector3(
+                1 / _ObjectTarget.localScale.x,
+                1 / _ObjectTarget.localScale.y,
+                1 / _ObjectTarget.localScale.z);
         }
     }
     
@@ -188,13 +201,13 @@ public class Axis : MonoBehaviour
         switch (axis.name)
         {
             case "AxisX":
-                _ObjectTarget.Rotate(distance * 0.00005f, 0, 0);
+                _ObjectTarget.Rotate(distance * 0.0005f, 0, 0);
                 break;
             case "AxisY":
-                _ObjectTarget.Rotate(0, distance * 0.00005f, 0);
+                _ObjectTarget.Rotate(0, distance * 0.0005f, 0);
                 break;
             case "AxisZ":
-                _ObjectTarget.Rotate(0, 0, distance * 0.00005f);
+                _ObjectTarget.Rotate(0, 0, distance * 0.0005f);
                 break;
         }
         SetTranformAxis();

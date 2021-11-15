@@ -6,34 +6,26 @@ using Object = System.Object;
 
 public class ObjectCreated : MonoBehaviour
 {
-    private GameObject _axisXYZ;
     private GameManager _gameManager;
+    private CanvasController _canvasController;
 
-    public void SetAxisXYZ(GameObject newAxis)
-    {
-        _axisXYZ = newAxis;
-    }
-
-    public GameObject GetAxisXYZ()
-    {
-        return _axisXYZ;
-    }
-    
     private void Start()
     {
+        _canvasController = FindObjectOfType<CanvasController>();
         _gameManager = FindObjectOfType<GameManager>();
     }
 
 #if UNITY_EDITOR
     private void OnMouseDown()
     {
-        _gameManager.currentObject = gameObject.name;
-        var listObjectsCreated = FindObjectsOfType<ObjectCreated>();
-        foreach (var ObjectCreated in listObjectsCreated)
+        _canvasController.objectSelected.text = gameObject.transform.parent.name;
+        _gameManager.currentObject = gameObject.transform.parent.name;
+        var listObjectsCreated = FindObjectsOfType<PrefabCreated>();
+        foreach (var prefabCreated in listObjectsCreated)
         {
-            ObjectCreated.GetAxisXYZ().SetActive(false);
+            prefabCreated.GetBox().gameObject.SetActive(false);
         }
-        _axisXYZ.SetActive(true);
+        gameObject.SetActive(true);
     }
 #endif
 
@@ -46,13 +38,14 @@ public class ObjectCreated : MonoBehaviour
         
             if (touch.phase == TouchPhase.Began)
             {
-                _gameManager.currentObject = gameObject.name;
-                var listObjectsCreated = FindObjectsOfType<ObjectCreated>();
-                foreach (var ObjectCreated in listObjectsCreated)
+                _canvasController.objectSelected.text = gameObject.transform.parent.name; 
+                _gameManager.currentObject = gameObject.transform.parent.name;
+                var listObjectsCreated = FindObjectsOfType<PrefabCreated>();
+                foreach (var prefabCreated in listObjectsCreated)
                 {
-                    ObjectCreated.GetAxisXYZ().SetActive(false);
+                    prefabCreated.GetBox().gameObject.SetActive(false);
                 }
-                _axisXYZ.SetActive(true);
+                gameObject.SetActive(true);
             }
         }
     }
