@@ -6,6 +6,7 @@ using Object = System.Object;
 
 public class ObjectCreated : MonoBehaviour
 {
+    [SerializeField] private Transform axis;
     private GameManager _gameManager;
     private CanvasController _canvasController;
 
@@ -18,14 +19,36 @@ public class ObjectCreated : MonoBehaviour
 #if UNITY_EDITOR
     private void OnMouseDown()
     {
-        _canvasController.objectSelected.text = gameObject.transform.parent.name;
-        _gameManager.currentObject = gameObject.transform.parent.name;
-        var listObjectsCreated = FindObjectsOfType<PrefabCreated>();
-        foreach (var prefabCreated in listObjectsCreated)
+        Ray raycast = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(raycast, out var hit))
         {
-            prefabCreated.GetBox().gameObject.SetActive(false);
+            if (hit.transform.parent.name == transform.parent.name)
+            {
+                _canvasController.objectSelected.text = gameObject.transform.parent.name; 
+                _gameManager.currentObject = gameObject.transform.parent.name;
+                var listObjectsCreated = FindObjectsOfType<PrefabCreated>();
+                foreach (var prefabCreated in listObjectsCreated)
+                {
+                    if (prefabCreated.name == transform.parent.name)
+                    {
+                        GetComponent<Rigidbody>().isKinematic = true;
+                        foreach (Transform child in axis)
+                        {
+                            
+                            child.gameObject.SetActive(true);
+                        }
+                    }
+                    else
+                    {
+                        prefabCreated.transform.GetChild(1).GetComponent<Rigidbody>().isKinematic = false;
+                        foreach (Transform child in prefabCreated.transform.GetChild(2))
+                        {
+                            child.gameObject.SetActive(false);
+                        }
+                    }
+                }
+            }
         }
-        gameObject.SetActive(true);
     }
 #endif
 
@@ -38,14 +61,33 @@ public class ObjectCreated : MonoBehaviour
         
             if (touch.phase == TouchPhase.Began)
             {
-                _canvasController.objectSelected.text = gameObject.transform.parent.name; 
-                _gameManager.currentObject = gameObject.transform.parent.name;
-                var listObjectsCreated = FindObjectsOfType<PrefabCreated>();
-                foreach (var prefabCreated in listObjectsCreated)
+                Ray raycast = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(raycast, out var hit))
                 {
-                    prefabCreated.GetBox().gameObject.SetActive(false);
+                    if (hit.transform.parent.name == transform.parent.name)
+                    {
+                        _canvasController.objectSelected.text = gameObject.transform.parent.name; 
+                        _gameManager.currentObject = gameObject.transform.parent.name;
+                        var listObjectsCreated = FindObjectsOfType<PrefabCreated>();
+                        foreach (var prefabCreated in listObjectsCreated)
+                        {
+                            if (prefabCreated.name == transform.parent.name)
+                            {
+                                foreach (Transform child in transform)
+                                {
+                                    child.gameObject.SetActive(true);
+                                }
+                            }
+                            else
+                            {
+                                foreach (Transform child in prefabCreated.transform.GetChild(1))
+                                {
+                                    child.gameObject.SetActive(false);
+                                }
+                            }
+                        }
+                    }
                 }
-                gameObject.SetActive(true);
             }
         }
     }

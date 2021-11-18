@@ -6,22 +6,19 @@ using UnityEngine;
 public class Axis : MonoBehaviour
 {
     [SerializeField] private Transform _ObjectTarget;
+    private CanvasController _canvasController;
     private GameManager _gameManager;
     private float distance;
     private Vector2 startPos;
     private Vector2 endPos;
     private GameObject axis;
-
-    public void SetObjectTarget(GameObject newObjectTarget)
-    {
-        _ObjectTarget = newObjectTarget.transform;
-    }
     
     // float movedownY = 0.0f;
     // float sensitivityY = 1;
 
     private void Start()
     {
+        _canvasController = FindObjectOfType<CanvasController>();
         _gameManager = FindObjectOfType<GameManager>();
         _ObjectTarget = transform.parent.parent;
     }
@@ -75,14 +72,18 @@ public class Axis : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
         if (Input.touchCount > 0)
         {
-            Ray raycast = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-            if (Physics.Raycast(raycast, out var hit))
-            {
-                startPos = Input.GetTouch(0).position;
-                axis = hit.transform.gameObject;
-            }
-
             Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                _canvasController.objectSelected.text = gameObject.transform.parent.name;
+                Ray raycast = Camera.main.ScreenPointToRay(touch.position);
+                if (Physics.Raycast(raycast, out var hit, 10f))
+                {
+                    startPos = touch.position;
+                    axis = hit.transform.gameObject;
+                }
+            }
+            
             if (touch.phase == TouchPhase.Moved)
             {
                 if (_ObjectTarget.name == _gameManager.currentObject)
@@ -152,13 +153,13 @@ public class Axis : MonoBehaviour
         switch (axis.name)
         {
             case "AxisX":
-                _ObjectTarget.localScale += new Vector3(distance * 0.000005f, 0, 0);
+                _ObjectTarget.localScale += new Vector3(distance * 0.00005f, 0, 0);
                 break;
             case "AxisY":
-                _ObjectTarget.localScale += new Vector3(0, distance * 0.000005f, 0);
+                _ObjectTarget.localScale += new Vector3(0, distance * 0.00005f, 0);
                 break;
             case "AxisZ":
-                _ObjectTarget.localScale += new Vector3(0, 0, distance * 0.000005f);
+                _ObjectTarget.localScale += new Vector3(0, 0, distance * 0.00005f);
                 break;
         }
         SetTranformAxis();
@@ -201,13 +202,13 @@ public class Axis : MonoBehaviour
         switch (axis.name)
         {
             case "AxisX":
-                _ObjectTarget.Rotate(distance * 0.0005f, 0, 0);
+                _ObjectTarget.Rotate(distance * 0.005f, 0, 0);
                 break;
             case "AxisY":
-                _ObjectTarget.Rotate(0, distance * 0.0005f, 0);
+                _ObjectTarget.Rotate(0, distance * 0.005f, 0);
                 break;
             case "AxisZ":
-                _ObjectTarget.Rotate(0, 0, distance * 0.0005f);
+                _ObjectTarget.Rotate(0, 0, distance * 0.005f);
                 break;
         }
         SetTranformAxis();
