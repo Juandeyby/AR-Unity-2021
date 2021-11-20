@@ -4,41 +4,48 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public string tranformMode;
-    public GameObject axisPrefab;
-    public string currentObject;
-    private int order = 0;
+    private ObjectAR _currentObjectAR;
+    private int _currentXYZ;
+
+    public ObjectAR GetObjectAR()
+    {
+        return _currentObjectAR;
+    }
     
-    public void SetModeTransform(string mode)
+    public void SetObjectAR(RaycastHit objectAR)
     {
-        tranformMode = mode;
+        if (_currentObjectAR) ChangeColorObjectAR(Color.white);
+        _currentObjectAR = objectAR.transform.GetComponent<ObjectAR>();
+        _currentObjectAR.SetRotationStart();
+        ChangeColorObjectAR(Color.red);
     }
 
-    public void Create(GameObject objectPrefab)
+    public void SetNullObjectAR()
     {
-        var objectCreated = Instantiate(objectPrefab);
-        objectCreated.name = objectPrefab.name + order;
-        order++;
-        // var axisCreated = Instantiate(axisPrefab);
-        //
-        // axisCreated.transform.parent = objectCreated.transform;
-        // axisCreated.transform.localPosition = Vector3.zero;
-        //
-        // objectCreated.GetComponentInChildren<ObjectCreated>().SetAxisXYZ(axisCreated);
-        // foreach (Transform trans in axisCreated.transform)
-        // {
-        //     var objectChild = objectCreated.transform.GetChild(0).gameObject;
-        //     trans.GetComponent<Axis>().SetObjectTarget(objectChild);
-        // }
-        // objectCreated.transform.eulerAngles = new Vector3(0, 180f, 0);
+        if (_currentObjectAR) ChangeColorObjectAR(Color.white);
+        _currentObjectAR = null;
     }
 
-    public void RemoveObjectOnClick()
+    public int GetCurrentAxis()
     {
-        if (GameObject.Find(currentObject))
-        {
-            var temp = GameObject.Find(currentObject);
-            Destroy(temp);   
-        }
+        return _currentXYZ;
+    }
+
+    public void SetCurrentAxis(int value)
+    {
+        _currentXYZ = value;
+    }
+
+    private void ChangeColorObjectAR(Color color)
+    {
+        var propertyBlock = new MaterialPropertyBlock();
+        propertyBlock.SetColor("_Color", color);
+        var renderer = _currentObjectAR.GetComponent<Renderer>();
+        renderer.SetPropertyBlock(propertyBlock);
+    }
+
+    public void RemoveObjectAR()
+    {
+        if (_currentObjectAR) Destroy(_currentObjectAR.gameObject);
     }
 }
