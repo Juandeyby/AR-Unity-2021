@@ -14,15 +14,15 @@ public class GameManager : MonoBehaviour
     
     public void SetObjectAR(RaycastHit objectAR)
     {
-        if (_currentObjectAR) ChangeColorObjectAR(Color.white);
+        if (_currentObjectAR) _currentObjectAR.GetComponent<MeshRenderer>().enabled = false;
         _currentObjectAR = objectAR.transform.GetComponent<ObjectAR>();
         _currentObjectAR.SetRotationStart();
-        ChangeColorObjectAR(Color.red);
+        _currentObjectAR.GetComponent<MeshRenderer>().enabled = true;
     }
 
     public void SetNullObjectAR()
     {
-        if (_currentObjectAR) ChangeColorObjectAR(Color.white);
+        if (_currentObjectAR) _currentObjectAR.GetComponent<MeshRenderer>().enabled = false;
         _currentObjectAR = null;
     }
 

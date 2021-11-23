@@ -7,13 +7,20 @@ public class ObjectAR : MonoBehaviour
 {
     private GameManager _gameManager;
     private CanvasController _canvasController;
+    private Rigidbody _rigidbody;
     private Vector3 _rotationStart;
     private Vector3 _scaleStart;
 
     private void Awake()
     {
+        _rigidbody = GetComponent<Rigidbody>();
         _gameManager = FindObjectOfType<GameManager>();
         _canvasController = FindObjectOfType<CanvasController>();
+    }
+
+    private void Update()
+    {
+        _rigidbody.velocity = Vector3.zero;
     }
 
     public void SetRotationStart()

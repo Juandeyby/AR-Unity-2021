@@ -21,6 +21,11 @@ public class CanvasController : MonoBehaviour
         return _transformId;
     }
 
+    public void ItemOnClick(GameObject namePrefab)
+    {
+        Instantiate(namePrefab);
+    }
+
     public void XYZOnClick(int value)
     {
         _gameManager.SetCurrentAxis(value);
