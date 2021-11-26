@@ -21,6 +21,26 @@ public class ObjectAR : MonoBehaviour
     private void Update()
     {
         _rigidbody.velocity = Vector3.zero;
+        CheckDestroy();
+    }
+
+    private void CheckDestroy()
+    {
+        if (transform.position.y <= -0.5f)
+        {
+            _gameManager.PlayClip("delete");
+            Destroy(gameObject);
+        }
+    }
+
+    public void SetActive(bool active)
+    {
+        _rigidbody.isKinematic = active;
+    }
+
+    public bool GetActive()
+    {
+        return _rigidbody.isKinematic;
     }
 
     public void SetRotationStart()
@@ -29,15 +49,17 @@ public class ObjectAR : MonoBehaviour
         _scaleStart = transform.localScale;
     }
     
-    public void TouchOnObjectAR(RaycastHit hit)
+    public void TouchOnObjectAR(RaycastHit hit) 
     {
-        if (_canvasController.GetTransformId() == 0) PositionObjectAR(hit);
+        if (_rigidbody.isKinematic) return;
+        if (_canvasController.GetTransformId() == 0) PositionObjectAR(hit); // Size
     }
     
     public void TouchOnObjectAR(float touchMagnitude)
     {
-        if (_canvasController.GetTransformId() == 1) RotateObjectAR(touchMagnitude);
-        if (_canvasController.GetTransformId() == 2) ScaleObjectAR(touchMagnitude);
+        if (_rigidbody.isKinematic) return;
+        if (_canvasController.GetTransformId() == 1) RotateObjectAR(touchMagnitude); //Rotate
+        if (_canvasController.GetTransformId() == 2) ScaleObjectAR(touchMagnitude); //Scale
     }
 
     private void PositionObjectAR(RaycastHit hit)

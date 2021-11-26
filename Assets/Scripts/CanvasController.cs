@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class CanvasController : MonoBehaviour
 {
     public List<Button> transformButtons;
+    [SerializeField] private Toggle toggleActive, toggleDesactive;
     private GameManager _gameManager;
     private int _transformId;
 
@@ -29,6 +30,33 @@ public class CanvasController : MonoBehaviour
     public void XYZOnClick(int value)
     {
         _gameManager.SetCurrentAxis(value);
+    }
+
+    public void ActiveOnClick(bool active)
+    {
+        if (_gameManager.GetObjectAR() == null) return;
+        if (active)
+        {
+            _gameManager.GetObjectAR().SetActive(true);
+        }
+        else
+        {
+            _gameManager.GetObjectAR().SetActive(false);
+        }
+    }
+
+    public void SetActive(bool active)
+    {
+        if (active)
+        {
+            toggleActive.isOn = active;
+            toggleDesactive.isOn = !active;
+        }
+        else
+        {
+            toggleActive.isOn = active;
+            toggleDesactive.isOn = !active;
+        }
     }
 
     public void PositionOnClick(Button button)

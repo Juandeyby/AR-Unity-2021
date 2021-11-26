@@ -1,21 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private CanvasController _canvasController;
+    private AudioController _audioController;
     private ObjectAR _currentObjectAR;
     private int _currentXYZ;
+
+    private void Awake()
+    {
+        _canvasController = FindObjectOfType<CanvasController>();
+        _audioController = GetComponent<AudioController>();
+    }
 
     public ObjectAR GetObjectAR()
     {
         return _currentObjectAR;
+    }
+
+    public void PlayClip(string key)
+    {
+        _audioController.Play(key);
     }
     
     public void SetObjectAR(RaycastHit objectAR)
     {
         if (_currentObjectAR) _currentObjectAR.GetComponent<MeshRenderer>().enabled = false;
         _currentObjectAR = objectAR.transform.GetComponent<ObjectAR>();
+        _canvasController.SetActive(_currentObjectAR.GetActive());
         _currentObjectAR.SetRotationStart();
         _currentObjectAR.GetComponent<MeshRenderer>().enabled = true;
     }
