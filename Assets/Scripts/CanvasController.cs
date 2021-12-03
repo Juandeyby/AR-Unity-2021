@@ -11,6 +11,7 @@ public class CanvasController : MonoBehaviour
     [SerializeField] private Toggle toggleActive, toggleDesactive;
     private GameManager _gameManager;
     private int _transformId;
+    private GameObject _gameObjectToCreate;
 
     private void Awake()
     {
@@ -22,9 +23,14 @@ public class CanvasController : MonoBehaviour
         return _transformId;
     }
 
+    public GameObject GetObjectARCreate()
+    {
+        return _gameObjectToCreate;
+    }
+
     public void ItemOnClick(GameObject namePrefab)
     {
-        Instantiate(namePrefab);
+        _gameObjectToCreate = namePrefab;
     }
 
     public void XYZOnClick(int value)

@@ -32,11 +32,20 @@ public class InputTouch : MonoBehaviour
                     var ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                     if (Physics.Raycast(ray, out var hit, float.MaxValue))
                     {
-                        Debug.Log(hit.collider.name);
-                        _gameManager.SetObjectAR(hit);
-                        _touchStart = Input.GetTouch(0).position;
+                        if (hit.transform.gameObject.CompareTag("Terrain"))
+                        {
+                            _gameManager.SetNullObjectAR();
+                            _gameManager.CreateObjectAR(hit);   
+                        }
+                        else
+                        {
+                            Debug.Log(hit.collider.name);
+                            _gameManager.SetObjectAR(hit);
+                            _touchStart = Input.mousePosition;   
+                        }
                     } else
                         _gameManager.SetNullObjectAR();
+                    return;
                 }
                 
                 if (Input.GetTouch(0).phase == TouchPhase.Moved)

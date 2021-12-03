@@ -30,12 +30,17 @@ public class InputMouse : MonoBehaviour
                 var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hit, float.MaxValue))
                 {
-                    if (hit.transform.gameObject.CompareTag("Terrain") == false)
+                    if (hit.transform.gameObject.CompareTag("Terrain"))
+                    {
+                        _gameManager.SetNullObjectAR();
+                        _gameManager.CreateObjectAR(hit);   
+                    }
+                    else
                     {
                         Debug.Log(hit.collider.name);
                         _gameManager.SetObjectAR(hit);
                         _touchStart = Input.mousePosition;   
-                    } else _gameManager.SetNullObjectAR();
+                    }
                 } else
                     _gameManager.SetNullObjectAR();
                 return;

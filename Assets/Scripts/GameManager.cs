@@ -63,4 +63,14 @@ public class GameManager : MonoBehaviour
     {
         if (_currentObjectAR) Destroy(_currentObjectAR.gameObject);
     }
+
+    public void CreateObjectAR(RaycastHit hitInfo)
+    {
+        var objectAR = _canvasController.GetObjectARCreate();
+        if (objectAR)
+        {
+            var distance = new Vector3(0, 0.01f, 0);
+            Instantiate(objectAR, hitInfo.point + distance, Quaternion.identity);   
+        }
+    }
 }
