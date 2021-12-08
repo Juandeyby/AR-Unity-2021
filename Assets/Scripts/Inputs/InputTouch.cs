@@ -53,10 +53,28 @@ public class InputTouch : MonoBehaviour
                     var ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                     if (Physics.Raycast(ray, out var hit, float.MaxValue))
                     {
-                        _gameManager.GetObjectAR().TouchOnObjectAR(hit);
+                        if (_gameManager.GetObjectAR().GetTag() == "Static")
+                        {
+                            var tempObject = _gameManager.GetObjectAR().GetComponent<StaticObjectAR>();
+                            tempObject.TouchOnObjectAR(hit);
+                        }
+                        else
+                        {
+                            var tempObject = _gameManager.GetObjectAR().GetComponent<DynamicObjectAR>();
+                            tempObject.TouchOnObjectAR(hit);   
+                        }
                     }
                     _touchEnd = Input.GetTouch(0).position;
-                    _gameManager.GetObjectAR().TouchOnObjectAR(_touchEnd.magnitude - _touchStart.magnitude);
+                    if (_gameManager.GetObjectAR().GetTag() == "Static")
+                    {
+                        var tempObject = _gameManager.GetObjectAR().GetComponent<StaticObjectAR>();
+                        tempObject.TouchOnObjectAR(_touchEnd.magnitude - _touchStart.magnitude);
+                    }
+                    else
+                    {
+                        var tempObject = _gameManager.GetObjectAR().GetComponent<DynamicObjectAR>();
+                        tempObject.TouchOnObjectAR(_touchEnd.magnitude - _touchStart.magnitude);
+                    }
                 }
                 
                 if (Input.GetTouch(0).phase == TouchPhase.Ended)

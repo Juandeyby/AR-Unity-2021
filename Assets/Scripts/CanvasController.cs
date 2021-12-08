@@ -31,6 +31,8 @@ public class CanvasController : MonoBehaviour
     public void ItemOnClick(GameObject namePrefab)
     {
         _gameObjectToCreate = namePrefab;
+        if (!_gameObjectToCreate.CompareTag("Static"))
+            _gameManager.ShowPanelControl();
     }
 
     public void XYZOnClick(int value)
@@ -43,11 +45,11 @@ public class CanvasController : MonoBehaviour
         if (_gameManager.GetObjectAR() == null) return;
         if (active)
         {
-            _gameManager.GetObjectAR().SetActive(true);
+            _gameManager.GetObjectAR().GetComponent<DynamicObjectAR>().SetActive(true);
         }
         else
         {
-            _gameManager.GetObjectAR().SetActive(false);
+            _gameManager.GetObjectAR().GetComponent<DynamicObjectAR>().SetActive(true);
         }
     }
 
