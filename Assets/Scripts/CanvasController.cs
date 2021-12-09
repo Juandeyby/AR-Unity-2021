@@ -12,6 +12,7 @@ public class CanvasController : MonoBehaviour
     private GameManager _gameManager;
     private int _transformId;
     private GameObject _gameObjectToCreate;
+    private bool _isObjectCreating;
 
     private void Awake()
     {
@@ -28,11 +29,22 @@ public class CanvasController : MonoBehaviour
         return _gameObjectToCreate;
     }
 
+    public void SetEmptyObjectPrefabAR()
+    {
+        _gameObjectToCreate = null;
+        DisableCreating();
+    }
+
+    public void DisableCreating()
+    {
+        _isObjectCreating = false;
+    }
+
     public void ItemOnClick(GameObject namePrefab)
     {
+        _isObjectCreating = true;
         _gameObjectToCreate = namePrefab;
-        if (!_gameObjectToCreate.CompareTag("Static"))
-            _gameManager.ShowPanelControl();
+        _gameManager.ShowPanelControl();
     }
 
     public void XYZOnClick(int value)
@@ -43,14 +55,7 @@ public class CanvasController : MonoBehaviour
     public void ActiveOnClick(bool active)
     {
         if (_gameManager.GetObjectAR() == null) return;
-        if (active)
-        {
-            _gameManager.GetObjectAR().GetComponent<DynamicObjectAR>().SetActive(true);
-        }
-        else
-        {
-            _gameManager.GetObjectAR().GetComponent<DynamicObjectAR>().SetActive(true);
-        }
+        _gameManager.GetObjectAR().SetActive(active);
     }
 
     public void SetActive(bool active)

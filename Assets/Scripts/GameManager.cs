@@ -9,8 +9,11 @@ public class GameManager : MonoBehaviour
     private CanvasController _canvasController;
 
     private AudioController _audioController;
+    
     private ObjectAR _currentObjectAR;
     private Color32 _currentColorObject;
+    private Vector3 _currentSizeObject;
+    
     private int _currentXYZ;
 
     private void Awake()
@@ -34,19 +37,9 @@ public class GameManager : MonoBehaviour
         if (IsPanelColor()) return;
         if (_currentObjectAR) _currentObjectAR.GetComponent<MeshRenderer>().enabled = false;
         _currentObjectAR = objectAR.transform.GetComponent<ObjectAR>();
-        if (_currentObjectAR.GetTag() == "Static")
-        {
-            var staticObject = objectAR.transform.GetComponent<StaticObjectAR>();
-            staticObject.SetRotationStart();
-            staticObject.GetComponent<MeshRenderer>().enabled = true;
-        }
-        else
-        {
-            var dynamicObject = objectAR.transform.GetComponent<DynamicObjectAR>();
-            _canvasController.SetActive(dynamicObject.GetActive());
-            dynamicObject.SetRotationStart();
-            dynamicObject.GetComponent<MeshRenderer>().enabled = true;   
-        }
+        _canvasController.SetActive(_currentObjectAR.GetActive());
+        _currentObjectAR.SetRotationStart();
+        _currentObjectAR.GetComponent<MeshRenderer>().enabled = true;  
     }
 
     public void SetStaticObjectAR()
@@ -74,7 +67,7 @@ public class GameManager : MonoBehaviour
     {
         var propertyBlock = new MaterialPropertyBlock();
         propertyBlock.SetColor("_Color", _currentColorObject);
-        var objectAR = newObjectAR.GetComponent<DynamicObjectAR>();
+        var objectAR = newObjectAR.GetComponent<ObjectAR>();
         objectAR.SetPropertyBlock(propertyBlock);
     }
 
@@ -86,19 +79,13 @@ public class GameManager : MonoBehaviour
     public void CreateObjectAR(RaycastHit hitInfo)
     {
         if (IsPanelColor()) return;
-        var objectAR = _canvasController.GetObjectARCreate();
-        if (!objectAR) return;
-        if (objectAR.CompareTag("Static"))
-        {
-            var distance = new Vector3(0, 0.05f, 0);
-            Instantiate(objectAR, hitInfo.point + distance, Quaternion.identity);
-        }
-        else
-        {
-            var distance = new Vector3(0, 0.01f, 0);
-            var newObjectAR = Instantiate(objectAR, hitInfo.point + distance, Quaternion.identity);
-            ChangeColorObjectAR(newObjectAR);
-        }
+        var objectPrefabAR = _canvasController.GetObjectARCreate();
+        if (!objectPrefabAR) return;
+        var distance = new Vector3(0, 0.05f * _currentSizeObject.y, 0);
+        var newObjectAR = Instantiate(objectPrefabAR, hitInfo.point + distance, Quaternion.identity);
+        newObjectAR.transform.localScale = _currentSizeObject * 5f;
+        ChangeColorObjectAR(newObjectAR);
+        _canvasController.SetEmptyObjectPrefabAR();
     }
 
     private bool IsPanelColor()
@@ -106,9 +93,14 @@ public class GameManager : MonoBehaviour
         return _panelColor.activeSelf;
     }
 
-    public void SetCurrentColor(Color32 color)
+    public void SetCurrentColor(Color32 newColor)
     {
-        _currentColorObject = color;
+        _currentColorObject = newColor;
+    }
+
+    public void SetCurrentSize(Vector3 newSize)
+    {
+        _currentSizeObject = newSize;
     }
 
     public void ShowPanelControl()

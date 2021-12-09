@@ -53,28 +53,10 @@ public class InputMouse : MonoBehaviour
                     var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     if (Physics.Raycast(ray, out var hit, float.MaxValue))
                     {
-                        if (_gameManager.GetObjectAR().GetTag() == "Static")
-                        {
-                            var tempObject = _gameManager.GetObjectAR().GetComponent<StaticObjectAR>();
-                            tempObject.TouchOnObjectAR(hit);
-                        }
-                        else
-                        {
-                            var tempObject = _gameManager.GetObjectAR().GetComponent<DynamicObjectAR>();
-                            tempObject.TouchOnObjectAR(hit);   
-                        }
+                        _gameManager.GetObjectAR().TouchOnObjectAR(hit);   
                     }
                     _touchEnd = Input.mousePosition;
-                    if (_gameManager.GetObjectAR().GetTag() == "Static")
-                    {
-                        var tempObject = _gameManager.GetObjectAR().GetComponent<StaticObjectAR>();
-                        tempObject.TouchOnObjectAR(_touchEnd.magnitude - _touchStart.magnitude);
-                    }
-                    else
-                    {
-                        var tempObject = _gameManager.GetObjectAR().GetComponent<DynamicObjectAR>();
-                        tempObject.TouchOnObjectAR(_touchEnd.magnitude - _touchStart.magnitude);
-                    }
+                    _gameManager.GetObjectAR().TouchOnObjectAR(_touchEnd.magnitude - _touchStart.magnitude);
                 }
             }
 
