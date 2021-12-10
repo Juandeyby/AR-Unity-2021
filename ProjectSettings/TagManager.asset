@@ -5,7 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Terrain
-  - Static
+  - Lock
   layers:
   - Default
   - TransparentFX

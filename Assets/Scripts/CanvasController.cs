@@ -40,6 +40,11 @@ public class CanvasController : MonoBehaviour
         _isObjectCreating = false;
     }
 
+    public bool isCreating()
+    {
+        return _isObjectCreating;
+    }
+
     public void ItemOnClick(GameObject namePrefab)
     {
         _isObjectCreating = true;

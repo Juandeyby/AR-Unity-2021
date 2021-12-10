@@ -33,7 +33,7 @@ public class InputMouse : MonoBehaviour
                     if (hit.transform.gameObject.CompareTag("Terrain"))
                     {
                         _gameManager.SetNullObjectAR();
-                        _gameManager.CreateObjectAR(hit);   
+                        _gameManager.CreateObjectAR(hit);
                     }
                     else
                     {

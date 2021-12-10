@@ -34,17 +34,19 @@ public class GameManager : MonoBehaviour
     
     public void SetObjectAR(RaycastHit objectAR)
     {
-        if (IsPanelColor()) return;
-        if (_currentObjectAR) _currentObjectAR.GetComponent<MeshRenderer>().enabled = false;
-        _currentObjectAR = objectAR.transform.GetComponent<ObjectAR>();
-        _canvasController.SetActive(_currentObjectAR.GetActive());
-        _currentObjectAR.SetRotationStart();
-        _currentObjectAR.GetComponent<MeshRenderer>().enabled = true;  
-    }
-
-    public void SetStaticObjectAR()
-    {
-        
+        if (_canvasController.isCreating())
+        {
+            CreateObjectAR(objectAR);
+        }
+        else
+        {
+            if (IsPanelColor()) return;
+            if (_currentObjectAR) _currentObjectAR.GetComponent<MeshRenderer>().enabled = false;
+            _currentObjectAR = objectAR.transform.GetComponent<ObjectAR>();
+            _canvasController.SetActive(_currentObjectAR.GetActive());
+            _currentObjectAR.SetRotationStart();
+            _currentObjectAR.GetComponent<MeshRenderer>().enabled = true;  
+        }
     }
 
     public void SetNullObjectAR()
