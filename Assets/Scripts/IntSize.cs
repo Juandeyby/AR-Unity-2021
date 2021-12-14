@@ -9,7 +9,7 @@ public class IntSize : MonoBehaviour
     [SerializeField] private string axis;
     [SerializeField] private TMP_Text valueText;
     private NewObjectPanel _newObjectPanel;
-    private int value = 1;
+    private float value = 1f;
 
     private void Start()
     {
@@ -18,23 +18,23 @@ public class IntSize : MonoBehaviour
 
     public void AddValueOnClick()
     {
-        if (value >= 9) return;
-        value++;
+        if (value >= 9.05f) return;
+        value += 0.2f;
         ChangeValueText();
         _newObjectPanel.ChangeSize(axis, value);
     }
 
     public void DelValueOnClick()
     {
-        if (value <= 1) return;
-        value--;
+        if (value <= 0.25f) return;
+        value -= 0.2f;
         ChangeValueText();
         _newObjectPanel.ChangeSize(axis, value);
     }
 
     private void ChangeValueText()
     {
-        valueText.text = value.ToString();
+        valueText.text = value.ToString("0.#");
     }
 
     private void OnDisable()

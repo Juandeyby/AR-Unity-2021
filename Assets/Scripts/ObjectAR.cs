@@ -99,7 +99,7 @@ public class ObjectAR : MonoBehaviour
     private void ScaleObjectAR(float touchMagnitude)
     {
         transform.localScale = _scaleStart;
-        var newMagnitude = touchMagnitude * 0.001f;
+        var newMagnitude = touchMagnitude * 0.002f;
         switch (_gameManager.GetCurrentAxis())
         {
             case 0: // X
@@ -139,5 +139,17 @@ public class ObjectAR : MonoBehaviour
         {
             renderer.SetPropertyBlock(newPropertyBlock);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Terrain")) return;
+        other.transform.parent = transform;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Terrain")) return;
+        other.transform.parent = null;
     }
 }

@@ -16,7 +16,7 @@ public class InputMouse : MonoBehaviour
     
     private void Update()
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
         GetInput();
 #endif
     }

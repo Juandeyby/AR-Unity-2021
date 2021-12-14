@@ -43,7 +43,7 @@ public class NewObjectPanel : MonoBehaviour
         HidePanelControl();
     }
 
-    public void ChangeSize(string axis, int value)
+    public void ChangeSize(string axis, float value)
     {
         switch (axis)
         {

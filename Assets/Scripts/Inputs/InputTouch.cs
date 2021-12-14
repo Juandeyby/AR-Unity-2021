@@ -16,7 +16,7 @@ public class InputTouch : MonoBehaviour
 
     private void Update()
     {
-#if UNITY_ANDROID
+#if UNITY_ANDROID // || UNITY_IOS
         GetInput();
 #endif
     }
