@@ -8,6 +8,7 @@ public class NewObjectPanel : MonoBehaviour
 {
     private GameManager _gameManager;
     private Vector3 _newSize;
+    [SerializeField] private List<Button> boxColors;
 
     private void Start()
     {
@@ -15,10 +16,30 @@ public class NewObjectPanel : MonoBehaviour
         _gameManager.SetCurrentSize(_newSize);
     }
 
+    private void GetConfigData()
+    {
+        var configColor = DataManager.GetConfigData();
+        boxColors[0].image.color = ConvertIntToColor(configColor.firstColor);
+        boxColors[1].image.color = ConvertIntToColor(configColor.secondColor);
+        boxColors[2].image.color = ConvertIntToColor(configColor.thirdColor);
+        boxColors[3].image.color = ConvertIntToColor(configColor.fourthColor);
+    }
+
+    private Color32 ConvertIntToColor(List<int> colors)
+    {
+        return new Color32(
+            (byte) colors[0],
+            (byte) colors[1],
+            (byte) colors[2],
+            255
+            );
+    }
+
     private void OnEnable()
     {
         _newSize = Vector3.one;
         if (_gameManager) _gameManager.SetCurrentSize(_newSize);
+        GetConfigData();
     }
 
     public void ChangeColor(string color)
@@ -26,17 +47,17 @@ public class NewObjectPanel : MonoBehaviour
         var newColor32 = new Color32(0, 0, 0, 255);
         switch (color)
         {
-            case "red":
-                newColor32 = new Color32(224, 41, 41, 255);
+            case "0":
+                newColor32 = boxColors[0].image.color;
                 break;
-            case "green":
-                newColor32 = new Color32(50, 217, 31, 255);
+            case "1":
+                newColor32 = boxColors[1].image.color;
                 break;
-            case "yellow":
-                newColor32 = new Color32(219, 204, 40, 255);
+            case "2":
+                newColor32 = boxColors[2].image.color;
                 break;
-            case "blue":
-                newColor32 = new Color32(35, 54, 212, 255);
+            case "3":
+                newColor32 = boxColors[3].image.color;
                 break;
         }
         _gameManager.SetCurrentColor(newColor32);

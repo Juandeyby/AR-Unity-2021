@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
         else
         {
             if (IsPanelColor()) return;
+            _canvasController.SetTransformPanel(true);
             if (_currentObjectAR) _currentObjectAR.GetComponent<MeshRenderer>().enabled = false;
             _currentObjectAR = objectAR.transform.GetComponent<ObjectAR>();
             _canvasController.SetActive(_currentObjectAR.GetActive());
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour
 
     public void SetNullObjectAR()
     {
+        _canvasController.SetTransformPanel(false);
         if (_currentObjectAR) _currentObjectAR.GetComponent<MeshRenderer>().enabled = false;
         _currentObjectAR = null;
     }
@@ -85,7 +87,7 @@ public class GameManager : MonoBehaviour
         if (!objectPrefabAR) return;
         var distance = new Vector3(0, 0.05f * _currentSizeObject.y, 0);
         var newObjectAR = Instantiate(objectPrefabAR, hitInfo.point + distance, Quaternion.identity);
-        newObjectAR.transform.localScale = _currentSizeObject * 5f;
+        newObjectAR.transform.localScale = _currentSizeObject * 5f * DataManager.GetConfigData().boxScale;
         ChangeColorObjectAR(newObjectAR);
         _canvasController.SetEmptyObjectPrefabAR();
     }

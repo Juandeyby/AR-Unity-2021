@@ -7,8 +7,10 @@ using UnityEngine.UI;
 
 public class CanvasController : MonoBehaviour
 {
-    public List<Button> transformButtons;
     [SerializeField] private Toggle toggleActive, toggleDesactive;
+    [SerializeField] private GameObject transformPanel;
+    [SerializeField] private GameObject settingsPanel;
+    public List<Button> transformButtons;
     private GameManager _gameManager;
     private int _transformId;
     private GameObject _gameObjectToCreate;
@@ -17,6 +19,11 @@ public class CanvasController : MonoBehaviour
     private void Awake()
     {
         _gameManager = FindObjectOfType<GameManager>();
+    }
+
+    public void SetTransformPanel(bool active)
+    {
+        transformPanel.SetActive(active);
     }
 
     public int GetTransformId()
@@ -88,7 +95,7 @@ public class CanvasController : MonoBehaviour
         ChangeButtons(button);
         _transformId = 1; // 1 = Rotation
     }
-    
+
     public void ScaleOnClick(Button button)
     {
         ChangeButtons(button);
@@ -108,24 +115,31 @@ public class CanvasController : MonoBehaviour
             {
                 ChangeColorButton(button, true);
                 continue;
-            } 
+            }
+
             ChangeColorButton(button, false);
         }
     }
-    
+
     private void ChangeColorButton(Button button, bool active)
     {
         var colorBlock = button.colors;
         if (active)
         {
             colorBlock.selectedColor = Color.red;
-            colorBlock.normalColor = Color.red;   
+            colorBlock.normalColor = Color.red;
         }
         else
         {
             colorBlock.selectedColor = Color.white;
             colorBlock.normalColor = Color.white;
         }
+
         button.colors = colorBlock;
+    }
+
+    public void ActiveSettingsOnClick()
+    {
+        settingsPanel.SetActive(true);
     }
 }
