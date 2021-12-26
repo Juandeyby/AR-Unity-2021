@@ -10,12 +10,6 @@ public class NewObjectPanel : MonoBehaviour
     private Vector3 _newSize;
     [SerializeField] private List<Button> boxColors;
 
-    private void Start()
-    {
-        _gameManager = FindObjectOfType<GameManager>();
-        _gameManager.SetCurrentSize(_newSize);
-    }
-
     private void GetConfigData()
     {
         var configColor = DataManager.GetConfigData();
@@ -37,8 +31,15 @@ public class NewObjectPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        _newSize = Vector3.one;
-        if (_gameManager) _gameManager.SetCurrentSize(_newSize);
+        _gameManager = FindObjectOfType<GameManager>();
+        var boxScale = DataManager.GetConfigData().boxScale;
+        Debug.Log(boxScale);
+        _newSize = new Vector3(boxScale, boxScale, boxScale);
+        if (_gameManager)
+        {
+            _gameManager.SetCurrentSize(_newSize);
+            Debug.Log(_newSize.x);
+        }
         GetConfigData();
     }
 

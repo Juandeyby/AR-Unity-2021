@@ -17,9 +17,9 @@ public class ConfigProperties : MonoBehaviour
         return valuesTemp;
     }
 
-    public float GetValue()
+    public int GetValue()
     {
-        return float.Parse(inputFieldValues[0].text);
+        return int.Parse(inputFieldValues[0].text);
     }
 
     public void SetValues(List<int> valuesTemp)

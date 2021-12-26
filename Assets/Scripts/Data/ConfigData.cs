@@ -11,7 +11,8 @@ public class ConfigData
     public List<int> thirdColor;
     public List<int> fourthColor;
     
-    public float boxScale;
+    public int boxScale;
+    public int gridScale;
     
     public ConfigData()
     {
@@ -41,6 +42,7 @@ public class ConfigData
         fourthColor.Add(54);
         fourthColor.Add(212);
 
-        boxScale = 1.0f;
+        boxScale = 10;
+        gridScale = 5;
     }
 }

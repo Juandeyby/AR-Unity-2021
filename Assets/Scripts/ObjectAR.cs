@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class ObjectAR : MonoBehaviour
 {
-    [SerializeField] private Transform _child;
+    public string id;
+    public Transform child;
     private GameManager _gameManager;
     private CanvasController _canvasController;
     private Rigidbody _rigidbody;
@@ -14,6 +16,7 @@ public class ObjectAR : MonoBehaviour
     
     private void Awake()
     {
+        id = Tools.ShortUnique();
         _rigidbody = GetComponent<Rigidbody>();
         _gameManager = FindObjectOfType<GameManager>();
         _canvasController = FindObjectOfType<CanvasController>();
@@ -65,18 +68,32 @@ public class ObjectAR : MonoBehaviour
 
     private void PositionObjectAR(RaycastHit hit)
     {
+        var gridScale = DataManager.GetConfigData().gridScale / 100f;
+        var round = SnapPosition(hit.point, gridScale);
         switch (_gameManager.GetCurrentAxis())
         {
             case 0: // X
-                transform.position = new Vector3(hit.point.x, transform.position.y, transform.position.z);       
+                transform.position = new Vector3(round.x, transform.position.y, transform.position.z);       
                 break;
             case 1: // Y
-                transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+                transform.position = new Vector3(transform.position.x, round.y, transform.position.z);
                 break;
             case 2: // Z
-                transform.position = new Vector3(transform.position.x, transform.position.y, hit.point.z);
+                transform.position = new Vector3(transform.position.x, transform.position.y, round.z);
                 break;
         }
+    }
+    
+    public static Vector3 SnapPosition(Vector3 input, float factor = 0.1f)
+    {
+        if (factor <= 0f)
+            throw new UnityException("factor argument must be above 0");
+
+        var x = Mathf.Round(input.x / factor) * factor;
+        var y = Mathf.Round(input.y / factor) * factor;
+        var z = Mathf.Round(input.z / factor) * factor;
+
+        return new Vector3(x,y,z);
     }
     
     private void RotateObjectAR(float touchMagnitude)
@@ -134,22 +151,10 @@ public class ObjectAR : MonoBehaviour
 
     public void SetPropertyBlock(MaterialPropertyBlock newPropertyBlock)
     {
-        var renderer = _child.GetComponent<Renderer>();
+        var renderer = child.GetComponent<Renderer>();
         if (renderer)
         {
             renderer.SetPropertyBlock(newPropertyBlock);
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Terrain")) return;
-        other.transform.parent = transform;
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Terrain")) return;
-        other.transform.parent = null;
     }
 }

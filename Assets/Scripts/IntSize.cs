@@ -18,23 +18,29 @@ public class IntSize : MonoBehaviour
 
     public void AddValueOnClick()
     {
-        if (value >= 9.05f) return;
-        value += 0.2f;
+        if (value >= 200f) return;
+        value += 1f;
         ChangeValueText();
         _newObjectPanel.ChangeSize(axis, value);
     }
 
     public void DelValueOnClick()
     {
-        if (value <= 0.25f) return;
-        value -= 0.2f;
+        if (value <= 1f) return;
+        value -= 1f;
         ChangeValueText();
         _newObjectPanel.ChangeSize(axis, value);
     }
 
     private void ChangeValueText()
     {
-        valueText.text = value.ToString("0.#");
+        valueText.text = value.ToString("0.# cm");
+    }
+
+    private void OnEnable()
+    {
+        value = DataManager.GetConfigData().boxScale;
+        ChangeValueText();
     }
 
     private void OnDisable()
